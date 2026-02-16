@@ -1,9 +1,9 @@
 -- Creating the initial table structure
 CREATE TABLE PublicHolidays (
-    HolidayID INT PRIMARY KEY,
+    HolidayID INT NOT NULL,
     HolidayName VARCHAR(255) NOT NULL,
     HolidayDate DATE NOT NULL,
-    IsFixed BOOLEAN NOT NULL
+    IsFixed VARCHAR NOT NULL
 );
 
 -- Inserting initial data into the table
