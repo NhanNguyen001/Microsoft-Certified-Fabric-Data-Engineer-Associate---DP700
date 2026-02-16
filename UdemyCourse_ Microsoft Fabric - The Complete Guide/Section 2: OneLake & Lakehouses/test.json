@@ -1,0 +1,36 @@
+{
+    "commitInfo": {
+        "timestamp": 1771078519174,
+        "operation": "WRITE",
+        "operationParameters": {
+            "mode": "Append",
+            "partitionBy": "[]"
+        },
+        "readVersion": 0,
+        "isolationLevel": "Serializable",
+        "isBlindAppend": true,
+        "operationMetrics": {
+            "numFiles": "1",
+            "numOutputRows": "103",
+            "numOutputBytes": "7257"
+        },
+        "tags": {
+            "VORDER": "true"
+        },
+        "engineInfo": "Apache-Spark/3.5.5.5.4.20251218.3 Delta-Lake/3.2.1.20251125.5",
+        "txnId": "b071ed1a-95db-4e55-896a-9db97e0f51ea"
+    }
+}
+{
+    "add": {
+        "path": "part-00000-afab7a6f-2c7d-419f-8003-c71a3038a7e2-c000.snappy.parquet",
+        "partitionValues": {},
+        "size": 7257,
+        "modificationTime": 1771078519060,
+        "dataChange": true,
+        "stats": "{\"numRecords\":103,\"minValues\":{\"Customer_ID\":1,\"Product_ID\":1,\"Quantity_Sold\":1,\"Timestamp\":\"2023-01-06T04:43:08.000Z\",\"Total_Price\":10.45,\"Transaction_ID\":101,\"Unit_Price\":8.14},\"maxValues\":{\"Customer_ID\":30,\"Product_ID\":49,\"Quantity_Sold\":10,\"Timestamp\":\"2023-12-30T23:57:19.000Z\",\"Total_Price\":927.1,\"Transaction_ID\":203,\"Unit_Price\":99.6},\"nullCount\":{\"Customer_ID\":0,\"Product_ID\":0,\"Quantity_Sold\":0,\"Timestamp\":1,\"Total_Price\":0,\"Transaction_ID\":0,\"Unit_Price\":0}}",
+        "tags": {
+            "VORDER": "true"
+        }
+    }
+}

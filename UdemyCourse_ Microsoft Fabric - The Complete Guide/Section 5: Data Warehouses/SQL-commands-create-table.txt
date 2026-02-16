@@ -1,0 +1,153 @@
+-- Creating the initial table structure
+CREATE TABLE PublicHolidays (
+    HolidayID INT PRIMARY KEY,
+    HolidayName VARCHAR(255) NOT NULL,
+    HolidayDate DATE NOT NULL,
+    IsFixed BOOLEAN NOT NULL
+);
+
+-- Inserting initial data into the table
+INSERT INTO PublicHolidays (HolidayID, HolidayName, HolidayDate, IsFixed) VALUES
+(1, 'New Year''s Day', '2024-01-01', 'TRUE'),
+(2, 'Independence Day', '2024-07-04', 'TRUE'),
+(3, 'Christmas Day', '2024-12-25', 'TRUE'),
+(4, 'Easter Sunday', '2024-04-07', 'FALSE'),
+(5, 'New Year''s Day', '2025-01-01', 'TRUE'),
+(6, 'Independence Day', '2025-07-04', 'TRUE'),
+(7, 'Christmas Day', '2025-12-25', 'TRUE'),
+(8, 'Easter Sunday', '2025-03-30', 'FALSE'),
+(9, 'New Year''s Day', '2026-01-01', 'TRUE'),
+(10, 'Independence Day', '2026-07-04', 'TRUE'),
+(11, 'Christmas Day', '2026-12-25', 'TRUE'),
+(12, 'Easter Sunday', '2026-04-19', 'FALSE');
+
+-- Updating specific records to normalize holiday names
+UPDATE PublicHolidays
+SET HolidayName = 'New Year'
+WHERE HolidayName = 'New Year''s Day';
+
+
+-- ALTER TABLE not supported:
+-- Altering the schema: changing a column data type and adding a new column
+ALTER TABLE PublicHolidays
+ALTER COLUMN IsFixed VARCHAR(5);
+ALTER TABLE PublicHolidays
+ADD COLUMN date_key INT;
+
+
+-- WORKAROUND
+-- Demonstrating table restructuring with a new table creation based on existing data
+CREATE TABLE [FirstWarehouse].[dbo].[PublicHolidays_New] AS
+SELECT 
+    HolidayID,
+    HolidayName,
+    HolidayDate,
+    CAST(IsFixed AS VARCHAR(20)) AS IsFixed, -- Demonstrates data type conversion
+    1 AS NewColumn -- Example of adding a new column during table creation
+FROM [FirstWarehouse].[dbo].[PublicHolidays];
+
+-- Cleanup process: Dropping the old table and replacing it with the new structure
+DROP TABLE PublicHolidays;
+
+CREATE TABLE [dbo].[PublicHolidays]
+AS
+SELECT *
+FROM [dbo].[PublicHolidays_New];
+
+DROP TABLE PublicHolidays_New;
+
+-- Updating the table to include a calculated value in 'date_key'
+UPDATE PublicHolidays 
+SET date_key = DATEPART(YEAR, HolidayDate) * 10000 + DATEPART(MONTH, HolidayDate) * 100 + DATEPART(DAY, HolidayDate)
+WHERE HolidayID BETWEEN 1 AND 12;
+
+-- Inserting additional data showcasing the use of the new schema
+INSERT INTO PublicHolidays (HolidayID, HolidayName, HolidayDate, IsFixed, date_key) VALUES
+(13, 'New Year''s Day', '2027-01-01', 'TRUE', 20270101);
+
+
+
+
+
+/*
+1. Drop the dimension_city table if it already exists.
+2. Create the dimension_city table.
+3. Drop the fact_sale table if it already exists.
+4. Create the fact_sale table.
+*/
+
+--dimension_city
+DROP TABLE IF EXISTS [dbo].[dimension_city];
+CREATE TABLE [dbo].[dimension_city]
+    (
+        [CityKey] [int] NULL,
+        [WWICityID] [int] NULL,
+        [City] [varchar](8000) NULL,
+        [StateProvince] [varchar](8000) NULL,
+        [Country] [varchar](8000) NULL,
+        [Continent] [varchar](8000) NULL,
+        [SalesTerritory] [varchar](8000) NULL,
+        [Region] [varchar](8000) NULL,
+        [Subregion] [varchar](8000) NULL,
+        [Location] [varchar](8000) NULL,
+        [LatestRecordedPopulation] [bigint] NULL,
+        [ValidFrom] [date] NULL,
+        [ValidTo] [date] NULL,
+        [LineageKey] [int] NULL
+    );
+
+--fact_sale
+
+DROP TABLE IF EXISTS [dbo].[fact_sale];
+
+CREATE TABLE [dbo].[fact_sale]
+
+    (
+        [SaleKey] [bigint] NULL,
+        [CityKey] [int] NULL,
+        [CustomerKey] [int] NULL,
+        [BillToCustomerKey] [int] NULL,
+        [StockItemKey] [int] NULL,
+        [InvoiceDateKey] [varchar](8000) NULL,
+        [DeliveryDateKey] [varchar](8000) NULL,
+        [SalespersonKey] [int] NULL,
+        [WWIInvoiceID] [int] NULL,
+        [Description] [varchar](8000) NULL,
+        [Package] [varchar](8000) NULL,
+        [Quantity] [int] NULL,
+        [UnitPrice] [float] NULL,
+        [TaxRate] [float] NULL,
+        [TotalExcludingTax] [float] NULL,
+        [TaxAmount] [float] NULL,
+        [Profit] [float] NULL,
+        [TotalIncludingTax] [float] NULL,
+        [TotalDryItems] [int] NULL,
+        [TotalChillerItems] [int] NULL,
+        [LineageKey] [int] NULL,
+        [Month] [int] NULL,
+        [Year] [int] NULL,
+        [Quarter] [int] NULL
+    );
+	
+
+
+--Copy data from the public Azure storage account to the dbo.dimension_city table.
+COPY INTO [dbo].[dimension_city]
+FROM 'https://worldwideimp.blob.core.windows.net/sampledata/WideWorldImportersDW/tables/dimension_city.parquet'
+WITH (FILE_TYPE = 'PARQUET');
+
+--Copy data from the public Azure storage account to the dbo.fact_sale table.
+COPY INTO [dbo].[fact_sale]
+FROM 'https://worldwideimp.blob.core.windows.net/sampledata/WideWorldImportersDW/tables/fact_sale.parquet'
+WITH (FILE_TYPE = 'PARQUET');
+
+
+
+--Create a clone of the dbo.dimension_city table.
+CREATE TABLE [dbo].[dimension_city1] AS CLONE OF [dbo].[dimension_city];
+
+--Create a clone of the dbo.fact_sale table.
+CREATE TABLE [dbo].[fact_sale1] AS CLONE OF [dbo].[fact_sale];
+
+
+
