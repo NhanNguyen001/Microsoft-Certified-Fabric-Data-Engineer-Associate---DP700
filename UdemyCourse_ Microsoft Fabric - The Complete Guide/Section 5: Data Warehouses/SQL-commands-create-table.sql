@@ -3,7 +3,7 @@ CREATE TABLE PublicHolidays (
     HolidayID INT NOT NULL,
     HolidayName VARCHAR(255) NOT NULL,
     HolidayDate DATE NOT NULL,
-    IsFixed VARCHAR NOT NULL
+    IsFixed VARCHAR(5) NOT NULL
 );
 
 -- Inserting initial data into the table
@@ -43,7 +43,7 @@ SELECT
     HolidayName,
     HolidayDate,
     CAST(IsFixed AS VARCHAR(20)) AS IsFixed, -- Demonstrates data type conversion
-    1 AS NewColumn -- Example of adding a new column during table creation
+    1 AS DateID -- Example of adding a new column during table creation
 FROM [FirstWarehouse].[dbo].[PublicHolidays];
 
 -- Cleanup process: Dropping the old table and replacing it with the new structure

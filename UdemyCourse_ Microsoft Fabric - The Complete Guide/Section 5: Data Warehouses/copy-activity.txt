@@ -1,0 +1,12 @@
+URL:
+
+https://worldwideimp.blob.core.windows.net/sampledata/
+
+Connection Name:
+Wide World Importers Public Sample
+
+
+File Path:
+Container: sampledata
+File path - Directory: WideWorldImportersDW/tables
+File path - File name: dimension_customer.parquet
