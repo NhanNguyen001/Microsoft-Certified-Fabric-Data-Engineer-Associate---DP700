@@ -1,0 +1,13 @@
+# Assuming `df` is your DataFrame
+
+# To write the DataFrame as a CSV file
+df.write.csv("path/to/output/directory/csv", header=True, mode="overwrite")
+
+# To write the DataFrame as a JSON file
+df.write.json("path/to/output/directory/json", mode="overwrite")
+
+# To write the DataFrame as a Parquet file
+df.write.parquet("path/to/output/directory/parquet", mode="overwrite")
+
+# To write the DataFrame as an ORC file
+df.write.orc("path/to/output/directory/orc", mode="overwrite")

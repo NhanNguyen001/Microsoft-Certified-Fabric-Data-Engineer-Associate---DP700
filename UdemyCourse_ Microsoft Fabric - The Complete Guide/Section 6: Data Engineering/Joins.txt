@@ -1,0 +1,5 @@
+# General Join syntax
+joined_df = df1.join(df2, joinExpression, joinType)
+
+# Assuming products and sales_example dataframe are already defined
+joined_df = joined_df = sales_example.join(products, products.product_id ==sales_example.product_id, "inner")

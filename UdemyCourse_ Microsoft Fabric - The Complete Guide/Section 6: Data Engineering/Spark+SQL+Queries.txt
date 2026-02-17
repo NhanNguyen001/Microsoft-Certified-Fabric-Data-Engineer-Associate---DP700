@@ -1,0 +1,26 @@
+result_df = spark.sql("""
+SELECT 
+    *
+FROM 
+    LakehouseTraining.sales
+""")
+
+
+
+
+# Display the result
+result_df.show()
+
+
+result_df = spark.sql("""
+SELECT 
+    p.Product_Name,
+    COUNT(s.Transaction_ID) as Total_Sales
+FROM 
+    LakehouseTraining.sales s
+JOIN 
+    LakehouseTraining.products p ON s.Product_ID = p.Product_ID
+GROUP BY 
+    p.Product_Name
+HAVING COUNT(s.Transaction_ID) >10
+""")
